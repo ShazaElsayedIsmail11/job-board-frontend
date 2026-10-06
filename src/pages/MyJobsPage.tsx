@@ -1,10 +1,8 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router";
 import { API_BASE_URL } from "../config/api";
+import { useAuth } from "../context/AuthContext";
 
-type MyJobsPageProps = {
-  token: string | null;
-};
 
 type Job = {
   id: number;
@@ -22,7 +20,8 @@ type MeResponse = {
 type JobsResponse = {
   data: Job[];
 };
-function MyJobsPage({ token }: MyJobsPageProps) {
+function MyJobsPage() {
+   const { token } = useAuth();
   const [jobs, setJobs] = useState<Job[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -162,6 +161,12 @@ return (
             </p>
 
             <div className="listing-card-actions">
+              <Link
+  className="listing-edit-link"
+  to={`/employer/jobs/${job.id}/applications`}
+>
+  View Applications
+</Link>
               <Link
                 className="listing-edit-link"
                 to={`/employer/jobs/${job.id}/edit`}

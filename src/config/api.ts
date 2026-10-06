@@ -1,2 +1,2 @@
 export const API_BASE_URL =
-  "https://job-board-api-ashen.vercel.app";
+  import.meta.env.VITE_API_BASE_URL;

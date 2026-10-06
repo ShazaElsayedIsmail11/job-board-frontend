@@ -1,9 +1,9 @@
 import { useEffect, useState, type FormEvent } from "react";
 import { Link } from "react-router";
 import { API_BASE_URL } from "../config/api";
-type ProfilePageProps = {
-  token: string | null;
-};
+import { useAuth } from "../context/AuthContext";
+
+
 
 type Profile = {
   name: string;
@@ -37,7 +37,8 @@ type SaveEmployerResponse = {
     companyDescription: string | null;
   };
 };
-function ProfilePage({ token }: ProfilePageProps) {
+function ProfilePage() {
+   const { token } = useAuth();
      const [profile, setProfile] = useState<Profile | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -276,7 +277,7 @@ async function handleSaveEmployer(
     <h1>My Profile</h1>
 
     {loading ? (
-      <p>Loading profile...</p>
+     <p role="status">Loading profile...</p>
     ) : error ? (
       <p role="alert">{error}</p>
     ) : !profile ? (

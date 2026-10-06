@@ -1,6 +1,7 @@
 import { useEffect, useState, type FormEvent  } from "react";
 import { Link, useParams } from "react-router";
 import { API_BASE_URL } from "../config/api";
+import { useAuth } from "../context/AuthContext";
 
 type Job = {
   id: number;
@@ -11,10 +12,9 @@ type Job = {
 type JobResponse = {
   data: Job;
 };
-type EditJobPageProps = {
-  token: string | null;
-};
-function EditJobPage({ token }: EditJobPageProps) {
+
+function EditJobPage() {
+   const { token } = useAuth();
   const { id } = useParams();
 const [title, setTitle] = useState("");
 const [description, setDescription] = useState("");

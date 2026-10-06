@@ -1,17 +1,30 @@
 import type { ReactNode } from "react";
 import { Navigate } from "react-router";
+import { useAuth } from "../context/AuthContext";
+
+type Role = "SEEKER" | "EMPLOYER";
 
 type ProtectedRouteProps = {
-  token: string | null;
   children: ReactNode;
+  allowedRole?: Role;
 };
 
 function ProtectedRoute({
-  token,
   children,
+  allowedRole,
 }: ProtectedRouteProps) {
+  const { token, user, loading } = useAuth();
+
+  if (loading) {
+    return <p role="status">Checking your account...</p>;
+  }
+
   if (!token) {
     return <Navigate to="/login" replace />;
+  }
+
+  if (allowedRole && user?.role !== allowedRole) {
+    return <Navigate to="/account" replace />;
   }
 
   return children;

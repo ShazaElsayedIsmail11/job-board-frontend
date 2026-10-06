@@ -18,7 +18,6 @@ function JobCard({
   return (
     <article className="job-card">
       <div className="job-card-content">
-        <span className="job-card-label">Job opportunity</span>
 
         <h3 className="job-card-title">{title}</h3>
 

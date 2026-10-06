@@ -1,10 +1,10 @@
 import { useState, type FormEvent } from "react";
 import { Link } from "react-router";
 import { API_BASE_URL } from "../config/api";
-type CreateJobPageProps = {
-  token: string | null;
-};
-function CreateJobPage({ token }: CreateJobPageProps) {
+import { useAuth } from "../context/AuthContext";
+
+function CreateJobPage() {
+   const { token } = useAuth();
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [loading, setLoading] = useState(false);

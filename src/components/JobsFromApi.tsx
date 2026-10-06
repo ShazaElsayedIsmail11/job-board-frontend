@@ -1,4 +1,4 @@
-import { useEffect, useState, type FormEvent } from "react";
+import { useEffect, useState } from "react";
 import { API_BASE_URL } from "../config/api";
 import JobCard from "./JobCard";
 type Job = {
@@ -24,17 +24,32 @@ function JobsFromApi() {
 const [loading, setLoading] = useState(true);
 const [selectedJobId,setSelectedJobId]=useState<number | null>(null)
 const [searchInput, setSearchInput] = useState("");
-const [submittedSearch, setSubmittedSearch] = useState("");
+const [debouncedSearch, setDebouncedSearch] = useState("");
 const [pagination, setPagination] =useState<pagination | null>(null);
 const [page,setPage]=useState(1)
+
+useEffect(() => {
+  const timer = setTimeout(() => {
+    setDebouncedSearch(searchInput.trim());
+    setPage(1);
+    setSelectedJobId(null);
+  }, 500);
+
+  return () => {
+    clearTimeout(timer);
+  };
+}, [searchInput]);
+
 useEffect(() => {
   
   const controller = new AbortController();
 
   async function loadJobs() {
+    setLoading(true)
+    setError("")
     try {
       const response = await fetch(
-       `${API_BASE_URL}/api/jobs?search=${encodeURIComponent(submittedSearch)}&page=${page}`,
+       `${API_BASE_URL}/api/jobs?search=${encodeURIComponent(debouncedSearch)}&page=${page}`,
         { signal: controller.signal }
       );
 
@@ -43,7 +58,6 @@ useEffect(() => {
       }
 
       const result: JobsResponse = await response.json();
-      console.log("FULL RESPONSE:", result);
 
       if (!controller.signal.aborted) {
         setJobs(result.data);
@@ -65,23 +79,8 @@ useEffect(() => {
   return () => {
     controller.abort();
   };
-}, [submittedSearch,page]);
-function handleSearch(event: FormEvent<HTMLFormElement>) {
-  event.preventDefault();
+}, [debouncedSearch,page]);
 
-  const newSearch = searchInput.trim();
-
-  if (newSearch === submittedSearch && page===1) {
-    return;
-  }
-
-  setLoading(true);
-  setError("");
-  setPagination(null);
-  setSelectedJobId(null);
-setPage(1)
-  setSubmittedSearch(newSearch);
-}
 function handleToggle(jobId: number) {
   if (selectedJobId === jobId) {
     setSelectedJobId(null);
@@ -117,17 +116,17 @@ return (
   <section className="jobs-section">
     <h2>Available jobs</h2>
 
-    <form className="job-search" onSubmit={handleSearch}>
-      <input
-        type="search"
-        aria-label="Search jobs"
-        value={searchInput}
-        onChange={(event) => setSearchInput(event.target.value)}
-        placeholder="Search jobs..."
-      />
-
-      <button type="submit">Search</button>
-    </form>
+   <div className="job-search">
+  <input
+    type="search"
+    aria-label="Search jobs"
+    value={searchInput}
+    onChange={(event) =>
+      setSearchInput(event.target.value)
+    }
+    placeholder="Search jobs..."
+  />
+</div>
 
     {loading ? (
       <p role="status">Loading jobs...</p>

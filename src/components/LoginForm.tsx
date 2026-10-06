@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { API_BASE_URL } from "../config/api";
+import { useAuth } from "../context/AuthContext";
+import { useNavigate } from "react-router";
 
 type LoginResponse = {
   data: {
@@ -9,17 +11,10 @@ type LoginResponse = {
     token: string;
   };
 };
-type MeResponse = {
-  data: {
-    name: string;
-    role: "SEEKER" | "EMPLOYER";
-  };
-};
-type loginProps={
-  token: string | null,
-  onTokenChange: (newToken:string | null)=>void
-}
-function LoginForm({token,onTokenChange}:loginProps) {
+
+
+function LoginForm() {
+   const { login } = useAuth();
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -27,6 +22,7 @@ function LoginForm({token,onTokenChange}:loginProps) {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState("");
+  const navigate=useNavigate()
   function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
     const { name, value } = event.target;
 
@@ -38,7 +34,6 @@ function LoginForm({token,onTokenChange}:loginProps) {
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-onTokenChange(null);
     setError("");
     setSuccess("");
     if (!formData.email.trim() || !formData.password.trim()) {
@@ -61,40 +56,19 @@ onTokenChange(null);
       }
       const result: LoginResponse = await response.json();
       setSuccess(`Welcome, ${result.data.user.name}`);
-      onTokenChange(result.data.token)
+      setTimeout(()=>{
+        navigate('/')
+      },800)
+    login(result.data.token);
     } catch {
       setError("Could not connect to the server");
     } finally {
       setLoading(false);
+      
     }
   }
-async function handleCheckProfile(){
-  if(!token){return;}
-  setError("");
-  try{
-      const response=await fetch(`${API_BASE_URL}/api/auth/me`, {
-        headers: {
-              Authorization: `Bearer ${token}`,
-        }
-      })
 
-        if (!response.ok) {
-      throw new Error("Profile request failed");
-    }
 
-const result: MeResponse= await response.json()
-setSuccess(
-      `Authenticated as ${result.data.name} (${result.data.role})`
-    );
-  }catch{
-      setError("Could not load your profile");
-  }
-}
-function handleLogout() {
-  onTokenChange(null);
-  setSuccess("");
-  setError("");
-}
  return (
   <section className="auth-page">
     <form className="auth-card auth-form" onSubmit={handleSubmit}>
@@ -148,17 +122,7 @@ function handleLogout() {
       </button>
     </form>
 
-    {token && (
-      <div className="auth-actions">
-        <button type="button" onClick={handleCheckProfile}>
-          Check My Profile
-        </button>
-
-        <button type="button" onClick={handleLogout}>
-          Logout
-        </button>
-      </div>
-    )}
+   
   </section>
 );
 }

@@ -1,10 +1,9 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router";
 import { API_BASE_URL } from "../config/api";
+import { useAuth } from "../context/AuthContext";
 
-type MyApplicationsPageProps = {
-  token: string | null;
-};
+
 
 type Application = {
   id: number;
@@ -19,9 +18,8 @@ type ApplicationsResponse = {
   data: Application[];
 };
 
-function MyApplicationsPage({
-  token,
-}: MyApplicationsPageProps) {
+function MyApplicationsPage() {
+   const { token } = useAuth();
     const [applications, setApplications] =
     useState<Application[]>([]);
 
