@@ -1,75 +1,63 @@
-# React + TypeScript + Vite
+# Job Board Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A simple job board frontend built with React and TypeScript.
 
-Currently, two official plugins are available:
+I built this project mainly to practice connecting a React frontend to a custom backend API, so the UI is intentionally simple. The main focus was working with authentication, protected routes, different user roles, API requests, and real application flows.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Features
 
-## React Compiler
+- Register and login
+- Job seeker and employer accounts
+- Browse and search jobs
+- Job pagination
+- View job details
+- Apply for jobs
+- View submitted applications
+- Create, edit, and delete jobs as an employer
+- View applicants for a job
+- Accept or reject applications
+- Profile management
+- Protected routes based on authentication and user role
+- Persistent login using localStorage
+- Responsive layout
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Tech Stack
 
-## Expanding the ESLint configuration
+- React
+- TypeScript
+- Vite
+- React Router
+- CSS
+- Vitest
+- React Testing Library
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## Backend
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+This frontend connects to a custom backend built separately with Node.js, Express, Prisma, PostgreSQL, and JWT authentication.
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+The main goal of this project was practicing the full connection between the frontend and backend rather than building a complex UI.
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+Backend repository:
 
+`https://github.com/ShazaElsayedIsmail11/job-board-api`
+
+## Environment Variables
+
+Create a `.env.local` file:
+
+```env
+VITE_API_BASE_URL=http://localhost:3000
 ```
 
-You can also install [eslint-plugin-react-x](https://npmx.dev/package/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://npmx.dev/package/eslint-plugin-react-dom) for React-specific lint rules:
+For production, use the deployed backend URL instead.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## Run Locally
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-
+```bash
+npm install
+npm run dev
 ```
+
+## Live Demo
+
+`https://job-board-frontend-khaki-eight.vercel.app`
