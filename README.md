@@ -39,7 +39,7 @@ The main goal of this project was practicing the full connection between the fro
 
 Backend repository:
 
-`https://github.com/ShazaElsayedIsmail11/job-board-api`
+[View Backend Repository](https://github.com/ShazaElsayedIsmail11/job-board-api)
 
 ## Environment Variables
 
@@ -60,4 +60,4 @@ npm run dev
 
 ## Live Demo
 
-`https://job-board-frontend-khaki-eight.vercel.app`
+[Open Live Demo](https://job-board-frontend-khaki-eight.vercel.app)
