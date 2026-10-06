@@ -14,8 +14,16 @@ import ProfilePage from "./pages/ProfilePage";
 import { useAuth } from "./context/AuthContext";
 import NotFoundPage from "./pages/NotFoundPage";
 import JobApplicationsPage from "./pages/JobApplicationsPage";
+import { useNavigate } from "react-router";
 function App() {
   const { token, user, logout } = useAuth();
+  const navigate=useNavigate()
+
+
+  function handleLogout() {
+    logout();
+    navigate("/");
+  }
   return (
     <>
       <nav className="site-nav">
@@ -98,7 +106,7 @@ function App() {
            <button
   className="nav-logout-button"
   type="button"
-  onClick={logout}
+  onClick={handleLogout}
 >
   Logout
 </button>
